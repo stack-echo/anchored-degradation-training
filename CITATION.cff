@@ -13,5 +13,5 @@ authors:
     email: "chenguanlin@hzcu.edu.cn"
 abstract: "Official code for 'Recognizing Molecules from Severely Degraded Images: Graph-Anchored Retrieval with Anchored Degradation Training' (under review)."
 license: MIT
-repository-code: "https://github.com/TODO-ORG/anchored-degradation-training"
+repository-code: "https://github.com/stack-echo/anchored-degradation-training"
 # doi: (assigned by Zenodo upon archival release)
