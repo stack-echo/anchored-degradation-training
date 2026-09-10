@@ -1,0 +1,16 @@
+# data and artifacts
+data/
+checkpoints/
+results/
+results_real/
+logs/
+pretrained_weights/
+*.pth
+*.npz
+*.npy
+
+# python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.DS_Store

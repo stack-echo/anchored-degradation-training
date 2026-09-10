@@ -1,0 +1,17 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "Anchored Degradation Training for Robust Molecular Image Recognition"
+authors:
+  - family-names: "Xu"
+    given-names: "Yuyang"
+    affiliation: "Hangzhou City University"
+    email: "2240101003@stu.hzcu.edu.cn"
+  - family-names: "Chen"
+    given-names: "Guanlin"
+    affiliation: "Hangzhou City University"
+    email: "chenguanlin@hzcu.edu.cn"
+abstract: "Official code for 'Recognizing Molecules from Severely Degraded Images: Graph-Anchored Retrieval with Anchored Degradation Training' (under review)."
+license: MIT
+repository-code: "https://github.com/TODO-ORG/anchored-degradation-training"
+# doi: (assigned by Zenodo upon archival release)
