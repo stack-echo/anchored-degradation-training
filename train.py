@@ -93,8 +93,12 @@ def build_train_transform(args):
     return get_degradation_transform(level=0, for_saving=False)
 
 
-def apply_mode_transform(images, graph_feats, fps, mode, device):
+def apply_mode_transform(images, graph_feats, fps, args, device):
     """Tensor-side modifications for baselines and graph-side ablations."""
+    mode = args.mode if hasattr(args, 'mode') else args
+    # A Morgan graph tower consumes fingerprints as its input on every mode
+    if getattr(args, 'graph_type', 'fastrp') == 'morgan':
+        graph_feats = fps.float()
     if mode == 'random_graph':
         # Graph-anchor necessity ablation: replace structure with noise
         graph_feats = torch.randn_like(graph_feats)
@@ -138,7 +142,7 @@ def train_one_epoch(model, loader, criterion, optimizer, scaler, device, epoch, 
                                     for x in [images, graph_feats, fps]]
 
         images, graph_feats = apply_mode_transform(images, graph_feats, fps,
-                                                   args.mode, device)
+                                                   args, device)
 
         optimizer.zero_grad()
         with autocast(device_type=dev_type, dtype=torch.bfloat16, enabled=amp_on):
@@ -167,7 +171,7 @@ def evaluate(model, loader, device, args):
                                     for x in [images, graph_feats, fps]]
 
         images, graph_feats = apply_mode_transform(images, graph_feats, fps,
-                                                   args.mode, device)
+                                                   args, device)
 
         with autocast(device_type=dev_type, dtype=torch.bfloat16, enabled=amp_on):
             img_embed, graph_embed, _ = model(images, graph_feats)
