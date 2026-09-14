@@ -128,9 +128,17 @@ class RealImageDataset(Dataset):
     def __len__(self):
         return len(self.records)
 
+    def resolve(self, image_id):
+        stem = os.path.splitext(str(image_id))[0]
+        for ext in ('.png', '.jpg', '.jpeg'):
+            path = os.path.join(self.img_dir, stem + ext)
+            if os.path.exists(path):
+                return path
+        return None
+
     def __getitem__(self, idx):
         r = self.records.iloc[idx]
-        path = os.path.join(self.img_dir, f"{str(r['image_id']).split('.')[0]}.png")
+        path = self.resolve(r['image_id'])
         img = np.array(Image.open(path).convert('RGB'))
         return self.transform(image=img)['image']
 
@@ -193,7 +201,7 @@ def main():
     model.eval()
     print(f'checkpoint loaded: {args.ckpt} (graph tower: {graph_type})')
 
-    cache = f'{args.out_dir}/gallery_embed_{tag}_{args.graph_repr}.npy'
+    cache = f'{args.out_dir}/gallery_embed_{tag}_{args.graph_repr}_{len(g_keys)}.npy'
     if os.path.exists(cache):
         gallery = torch.from_numpy(np.load(cache)).to(args.device)
     else:
@@ -219,7 +227,13 @@ def main():
             ev = rec[(rec.valid) & (rec.in_gallery)].reset_index(drop=True)
         if args.max_queries > 0:
             ev = ev.iloc[:args.max_queries]
-        ds = RealImageDataset(ev, f'{args.real_root}/curated/{bench}/images')
+        _img_dir = f'{args.real_root}/curated/{bench}/images'
+        _probe = RealImageDataset(ev, _img_dir)
+        _keep = [i for i, r in ev.iterrows() if _probe.resolve(r['image_id'])]
+        if len(_keep) < len(ev):
+            print(f'[{bench}] skipped {len(ev) - len(_keep)} records with missing images')
+        ev = ev.loc[_keep].reset_index(drop=True)
+        ds = RealImageDataset(ev, _img_dir)
         loader = DataLoader(ds, batch_size=args.batch_size, shuffle=False,
                             num_workers=args.num_workers)
 
