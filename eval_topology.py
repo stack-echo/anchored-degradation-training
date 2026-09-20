@@ -180,6 +180,11 @@ def main():
             'mean_tanimoto': np.mean(tani), 'n': len(tani),
         }
         summary_rows.append(row)
+        pd.DataFrame({'ring_match': ring_m, 'atom_match': atom_m,
+                      'bond_match': bond_m, 'aromatic_ring_match': arom_m,
+                      'tanimoto': tani}).to_csv(
+            os.path.join(args.out_dir, f"topology_persample_{tag}_L{level}.csv"),
+            index=False)
         print(f"\n[L{level}] R@1={row['I2G_R@1']:.2f}% | ring={row['ring_match']:.4f} "
               f"atom={row['atom_match']:.4f} bond={row['bond_match']:.4f} "
               f"arom={row['aromatic_ring_match']:.4f} tanimoto={row['mean_tanimoto']:.4f}")
