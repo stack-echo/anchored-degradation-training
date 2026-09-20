@@ -78,6 +78,24 @@ python eval_real.py --ckpt checkpoints/XXX.pth --graph_repr morgan \
 python bench_latency.py --ckpt checkpoints/XXX.pth \
     --gallery_emb results_real/gallery_embed_XXX_morgan.npy \
     --img_dir data/real_benchmarks/curated/Staker/images --threads 4
+
+# Topology-preservation probe (Section 4.5: ring/atom/bond/aromatic-ring
+# exact match and mean Tanimoto of the top-1 retrieval, per degradation level)
+python eval_topology.py --ckpt checkpoints/XXX.pth \
+    --vision_backbone convnext_base --levels 0,3,4 \
+    --csv data/my_200k_dataset.csv --img_dir data/pretrain_images \
+    --fp data/processed/morgan_fingerprints.npz \
+    --graph data/processed/fastrp_embeddings.npz
+
+# Open-set probe (Section 4.8: covered vs uncovered separability AUROC and
+# precision-coverage abstention curves after holding out part of the gallery)
+python eval_openset.py --ckpt checkpoints/XXX.pth --graph_repr morgan \
+    --vision_backbone convnext_base --holdout_frac 0.5 --seed 42
+
+# Training-set / benchmark overlap quantification (Limitations; Appendix F.4:
+# exact and near-duplicate Tanimoto >= 0.9 overlap against the 200k pool)
+python overlap_quant.py --real_root data/real_benchmarks \
+    --csv_200k data/my_200k_dataset.csv
 ```
 
 ## Repository layout
@@ -86,6 +104,9 @@ python bench_latency.py --ckpt checkpoints/XXX.pth \
 train.py                  training: ADT + all baselines/ablations
 eval.py                   five-level degradation benchmark evaluation
 eval_real.py              real-world OCSR benchmark evaluation
+eval_topology.py          topology-preservation probe (Section 4.5)
+eval_openset.py           open-set / abstention probe (Section 4.8)
+overlap_quant.py          train-benchmark overlap quantification (Appendix F.4)
 bench_latency.py          CPU latency benchmark
 generate_benchmarks.py    static five-level test-set generation
 render_styles.py          style-diverse re-rendering of training images
