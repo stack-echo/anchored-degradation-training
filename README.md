@@ -1,6 +1,6 @@
 # Anchored Degradation Training for Robust Molecular Image Recognition
 
-Official code for **"Recognizing Molecules from Severely Degraded Images: Graph-Anchored Retrieval with Anchored Degradation Training"** (under review).
+Official code for **"Anchored Degradation Training for Robust Molecular Image Recognition via Graph-Anchored Retrieval"** (under review).
 
 **Anchored Degradation Training (ADT)** is a training strategy for retrieval-based molecular image recognition (OCSR). The image encoder is trained along a controlled degradation axis while the molecular graph encoder remains anchored to clean structural ground truth. Recognition is formulated as retrieval against a validated gallery of molecular graphs rather than autoregressive decoding, so outputs are deterministic and chemically valid by construction.
 

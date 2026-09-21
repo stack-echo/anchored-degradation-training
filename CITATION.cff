@@ -11,7 +11,7 @@ authors:
     given-names: "Guanlin"
     affiliation: "Hangzhou City University"
     email: "chenguanlin@hzcu.edu.cn"
-abstract: "Official code for 'Recognizing Molecules from Severely Degraded Images: Graph-Anchored Retrieval with Anchored Degradation Training' (under review)."
+abstract: "Official code for 'Anchored Degradation Training for Robust Molecular Image Recognition via Graph-Anchored Retrieval' (under review)."
 license: MIT
 repository-code: "https://github.com/stack-echo/anchored-degradation-training"
 # doi: (assigned by Zenodo upon archival release)
